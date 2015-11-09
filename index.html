@@ -45,7 +45,8 @@
             
             <ol class="breadcrumb">
                 <li><a href="#">Home</a></li>
-                <li><a href="#">Login</a></li>
+                <li><fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+        </fb:login-button></li>
             </ol>
             
         </div>
@@ -66,6 +67,8 @@
 		<!-- Results -->
 		<div ng-show="showResults" class="container-fixed">
             <div class="container">
+                
+                
                 <div class="img-container" ng-show="imgExists">
                     <img class="artist-image" ng-src="{{artist.images[0].url}}" />
                 </div>
