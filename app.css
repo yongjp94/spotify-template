@@ -9,3 +9,25 @@ body {
 #app-body {
     margin-top: 3em;
 }
+
+.artist-image {
+    width:100%;
+}
+
+.img-container {
+    width: 40em;
+    height: 25em;
+    overflow: scroll;
+    display: block;
+    margin: 0 auto;
+}
+
+.artist-name {
+    font-size: 4em;
+    text-align: center;
+}
+
+.details {
+    font-size: 2em;
+    text-align: center;
+}

@@ -11,6 +11,7 @@
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.2/angular.min.js"></script>
+    <script src="//www.parsecdn.com/js/parse-1.6.7.min.js"></script>
 	
 	<!-- Read scripts -->
 	<script src="app.js"></script>
@@ -18,6 +19,26 @@
 	
 </head>
 <body>
+    
+    <!-- Facebook Initialization-->
+    <script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '402435796632912',
+          xfbml      : true,
+          version    : 'v2.5'
+        });
+      };
+
+      (function(d, s, id){
+         var js, fjs = d.getElementsByTagName(s)[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement(s); js.id = id;
+         js.src = "//connect.facebook.net/en_US/sdk.js";
+         fjs.parentNode.insertBefore(js, fjs);
+       }(document, 'script', 'facebook-jssdk'));
+    </script>
+    
 	<!-- Initiate app -->
     <nav class="navbar nav-default navbar-fixed-top">
         <div class="container-fluid">
@@ -26,29 +47,39 @@
                 <li><a href="#">Home</a></li>
                 <li><a href="#">Login</a></li>
             </ol>
+            
         </div>
     </nav>
     
 	<div id="app-body" ng-app="myApp" ng-controller="myCtrl">
 		<!-- Form -->
-		<form class="container" name="songForm">
+        <form class="container" name="artistForm">
 			<div class="form-group">
-				<label>Search: </label>
-				<input name="search" placeholder="Enter your search.." ng-model="track" class="form-control"></input>
+				<label>Artist Search: </label>
+				<input name="search" placeholder="Search for an artist!" ng-model="artist" class="form-control"></input>
 			</div>
 			<div class="form-group">
-				<button ng-disabled="songForm.search.$invalid" class="btn btn-primary" ng-click="getSongs()" type="submit">Submit</button>
+				<button ng-disabled="artistForm.search.$invalid" class="btn btn-primary" ng-click="getArtists(); getSongs()" type="submit">Submit</button>
 			</div>
 		</form>
 		
 		<!-- Results -->
-		<div class="container-fixed">
-			<p ng-show="tracks.length>0" class="help-block">Click to sample</p>
-			<ul>
-				<li ng-repeat="track in tracks" class="" ng-click="play(track.preview_url)" title="{{track.name}}">{{track.name + ', by ' + track.artists[0].name}}</li>
-			</ul>
+		<div ng-show="showResults" class="container-fixed">
+            <div class="container">
+                <div class="img-container" ng-show="imgExists">
+                    <img class="artist-image" ng-src="{{artist.images[0].url}}" />
+                </div>
+                <p class="artist-name">{{artist.name}}</p>
+                <p class="details">{{'Popularity: ' + artist.popularity + '/100'}}</p>
+                <p class="details">{{'# of Followers: ' + artist.followers.total}}</p>
+                <p class="details"><a ng-href="{{artist.external_urls.spotify}}">Listen to the artist's full songs on Spotify</a></p>
+                
+                <p ng-show="tracks.length>0" class="help-block">Click to hear some of the artist's songs!</p>
+                <ul class="list-group">
+                    <li class="list-group-item" ng-repeat="track in tracks | limitTo:5" class="" ng-click="play(track.preview_url)" title="{{track.name}}">{{track.name + ', by ' + track.artists[0].name}}</li>
+                </ul>
+            </div>
 		</div>
-	</div>
 	</div>
 </body>
 </html>
