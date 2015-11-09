@@ -1,17 +1,58 @@
+@import url(https://fonts.googleapis.com/css?family=Waiting+for+the+Sunrise);
+
 body {
   padding:10px;
+  background: url(https://images.unsplash.com/photo-1431308305062-f218b6fe520a?fit=crop&fm=jpg&h=825&ixlib=rb-0.3.5&q=80&w=1450) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    color: white;
 }
 
-#brand-logo {
-    width: 30px;
+.jumbotron {
+    margin: 1em;
+    border-radius: 20px;
+    text-align: center;
+    background: none;
+    opacity: 0.8;
+    font-family: 'Waiting for the Sunrise', cursive;
+}
+
+form {
+    opacity: 0.8;
 }
 
 #app-body {
     margin-top: 3em;
 }
 
+#suggestion {
+    list-style-type: none;
+    text-align: center;
+}
+
+#suggestionHelp {
+    text-align: center;
+}
+
 .artist-image {
     width:100%;
+    border-radius: 10px;
+}
+
+.suggestion-container {
+    text-align: center;
+    margin-top: 2em;
+    width: 35em;
+    background: white;
+    display: block;
+    margin: 0 auto;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    opacity: 0.8;
+    border-radius: 10px;
+    color: black;
 }
 
 .img-container {
@@ -20,6 +61,8 @@ body {
     overflow: scroll;
     display: block;
     margin: 0 auto;
+    margin-top: 3em;
+    border-radius: 10px;
 }
 
 .artist-name {
@@ -30,4 +73,24 @@ body {
 .details {
     font-size: 2em;
     text-align: center;
+}
+
+.detail-container {
+    margin-top: 2em;
+    background: white;
+    opacity: 0.8;
+    border-radius: 10px;
+    color: black;
+}
+
+.biography {
+    font: 1.2em;
+}
+
+.list-group {
+    opacity: 0.8;
+}
+
+.list-group-item {
+    color: black;
 }

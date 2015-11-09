@@ -11,74 +11,52 @@
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.2/angular.min.js"></script>
-    <script src="//www.parsecdn.com/js/parse-1.6.7.min.js"></script>
 	
 	<!-- Read scripts -->
 	<script src="app.js"></script>
-    <script src="login.js"></script>
 	<link href="app.css" type="text/css" rel="stylesheet"/>	
 	
 </head>
 <body>
-    
-    
-    <!-- Facebook Initialization-->
-    <script>
-      window.fbAsyncInit = function() {
-        FB.init({
-          appId      : '402435796632912',
-          xfbml      : true,
-          version    : 'v2.5'
-        });
-      };
-
-      (function(d, s, id){
-         var js, fjs = d.getElementsByTagName(s)[0];
-         if (d.getElementById(id)) {return;}
-         js = d.createElement(s); js.id = id;
-         js.src = "//connect.facebook.net/en_US/sdk.js";
-         fjs.parentNode.insertBefore(js, fjs);
-       }(document, 'script', 'facebook-jssdk'));
-    </script>
-    
 	<!-- Initiate app -->
-    <nav class="navbar nav-default navbar-fixed-top">
-        <div class="container-fluid">
-            
-            <ol class="breadcrumb">
-                <li><a href="#">Home</a></li>
-                <li><fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
-        </fb:login-button></li>
-            </ol>
-            
-        </div>
-    </nav>
+    <div class="jumbotron"><h1>Music Now!</h1></div>
     
 	<div id="app-body" ng-app="myApp" ng-controller="myCtrl">
 		<!-- Form -->
         <form class="container" name="artistForm">
 			<div class="form-group">
 				<label>Artist Search: </label>
-				<input name="search" placeholder="Search for an artist!" ng-model="artist" class="form-control"></input>
+				<input name="search" placeholder="Search for an artist!" ng-model="artistName" class="form-control"></input>
 			</div>
 			<div class="form-group">
-				<button ng-disabled="artistForm.search.$invalid" class="btn btn-primary" ng-click="getArtists(); getSongs()" type="submit">Submit</button>
+				<button ng-disabled="artistForm.search.$invalid" class="btn btn-primary" ng-click="getArtists()" type="submit">Submit</button>
 			</div>
 		</form>
 		
 		<!-- Results -->
 		<div ng-show="showResults" class="container-fixed">
             <div class="container">
-                
-                
+                <div class="suggestion-container">
+                    <p id="suggestionHelp">Not who you're looking for? Try searching for:
+                        <p id="suggestion" ng-repeat="person in allArtists | limitTo:4" ng-if="$index >= 1"><a>{{person.name}}</a></p>
+                    </p>
+                </div>
+
                 <div class="img-container" ng-show="imgExists">
+                    
                     <img class="artist-image" ng-src="{{artist.images[0].url}}" />
                 </div>
-                <p class="artist-name">{{artist.name}}</p>
-                <p class="details">{{'Popularity: ' + artist.popularity + '/100'}}</p>
-                <p class="details">{{'# of Followers: ' + artist.followers.total}}</p>
-                <p class="details"><a ng-href="{{artist.external_urls.spotify}}">Listen to the artist's full songs on Spotify</a></p>
-                
+                <div class="container detail-container">
+                    
+                    <p class="artist-name">{{artist.name}}</p>
+                    <p class="details">{{'Popularity: ' + artist.popularity + '/100'}}</p>
+                    <p class="details">{{'# of Followers: ' + artist.followers.total}}</p>
+                    <p ng-hide="noBio" class="biography">{{biography.text}}</p>
+
+                    <p class="details"><a ng-href="{{artist.external_urls.spotify}}">Listen to the artist's full songs on Spotify</a></p>
+                </div>
+
+
                 <p ng-show="tracks.length>0" class="help-block">Click to hear some of the artist's songs!</p>
                 <ul class="list-group">
                     <li class="list-group-item" ng-repeat="track in tracks | limitTo:5" class="" ng-click="play(track.preview_url)" title="{{track.name}}">{{track.name + ', by ' + track.artists[0].name}}</li>

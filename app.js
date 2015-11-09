@@ -1,60 +1,61 @@
-Parse.initialize("743sVGRWPfvsEFzh3AWioIhULr0pknf37XUJoS53", "5F7cp3Hh5Zg7A2137sPAxVtwrQAuNOsqpXEJChYR");
-
 var artistData;
 var trackData;
 var baseUrl = 'https://api.spotify.com/v1/search?type=track&query='
 var artistUrl = 'https://api.spotify.com/v1/search?type=artist&query='
+var biographyUrl ='http://developer.echonest.com/api/v4/artist/biographies?api_key=TCEL3VT1U0ZQZXKFP&id=spotify:artist:'
+var biographyData;
 var myApp = angular.module('myApp', [])
-
-var TestObject = Parse.Object.extend("TestObject");
-var testObject = new TestObject();
-testObject.save({foo: "bar"}).then(function(object) {
-});
-
-var FavoriteArtists = Parse.Object.extend("FavoriteArtists");
-var favoriteArtists = new FavoriteArtists();
-
 
 var myCtrl = myApp.controller('myCtrl', function($scope, $http) {
     $scope.showResults = false;
-  $scope.audioObject = {}
-  $scope.getSongs = function() {
-    $http.get(baseUrl + $scope.artist)
-         .success(function(response){
-      data = $scope.tracks = response.tracks.items
-      
-    })
-  }
+    $scope.audioObject = {}
+    
   
-  $scope.play = function(song) {
-    if($scope.currentSong == song) {
-      $scope.audioObject.pause()
-      $scope.currentSong = false
-      return
+    $scope.play = function(song) {
+        if($scope.currentSong == song) {
+            $scope.audioObject.pause()
+            $scope.currentSong = false
+            return
+        }
+        else {
+            if($scope.audioObject.pause != undefined) $scope.audioObject.pause()
+            $scope.audioObject = new Audio(song);
+            $scope.audioObject.play()  
+            $scope.currentSong = song
+        }
     }
-    else {
-      if($scope.audioObject.pause != undefined) $scope.audioObject.pause()
-      $scope.audioObject = new Audio(song);
-      $scope.audioObject.play()  
-      $scope.currentSong = song
-    }
-  }
-  
-  $scope.getArtists = function() {
-        $scope.showResults = true;
-        $http.get(artistUrl + $scope.artist).success(function(response) {
+
+    $scope.getArtists = function() {
+        $http.get(artistUrl + $scope.artistName).success(function(response) {
+            
+            $scope.showResults = true;
             artistData = $scope.artist = response.artists.items[0]
+            $scope.allArtists = response.artists.items
             if (artistData.images.length < 1) {
                 $scope.imgExists = false;
             } else {
                 $scope.imgExists = true;
             }
             
-            $http.get(baseUrl + data.name).success(function(response){
+            $http.get(baseUrl + artistData.name).success(function(response){
                 trackData = $scope.tracks = response.tracks.items
             })
+            
+            $http.get(biographyUrl + artistData.id).success(function(response) {
+                var bioResponse = response.response
+                if (bioResponse.status.message == "Success") {
+                    $scope.noBio = false;
+                } else {
+                    $scope.noBio = true;
+                }
+                var i = 0;
+                while (i < bioResponse.biographies.length && bioResponse.biographies[i].text.length < 75) {
+                    i++;
+                }
+                biographyData = $scope.biography = bioResponse.biographies[i];
+            })
         })
-  }
+    }
 })
 
 // Add tool tips to anything with a title property
